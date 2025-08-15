@@ -1,0 +1,65 @@
+{
+  "manifest_version": 3,
+  "name": "Khoj - AI Web Scraper",
+  "version": "2.0.0",
+  "description": "Intelligent web scraping with AI-powered selector generation. Extract structured data from any website with one click.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "contextMenus",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Khoj Web Scraper",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["khoj-overlay.html", "khoj-styles.css"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "commands": {
+    "quick-scrape": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+K",
+        "mac": "Command+Shift+K"
+      },
+      "description": "Quick scrape current page"
+    },
+    "toggle-selector": {
+      "suggested_key": {
+        "default": "Alt+S"
+      },
+      "description": "Toggle element selector mode"
+    }
+  }
+}
