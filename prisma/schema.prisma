@@ -1,0 +1,181 @@
+generator client { 
+  provider = "prisma-client-js" 
+}
+
+datasource db { 
+  provider = "postgresql"
+  url = env("DATABASE_URL") 
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String?
+  apiKey      String   @unique @default(cuid())
+  plan        Plan     @default(FREE)
+  usageCount  Int      @default(0)
+  scrapers    Scraper[]
+  webhooks    Webhook[]
+  exports     Export[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Scraper {
+  id              String          @id @default(cuid())
+  name            String
+  url             String
+  status          ScraperStatus   @default(ACTIVE)
+  latestVersionId String? 
+  user            User?           @relation(fields: [userId], references: [id])
+  userId          String?
+  versions        ScraperVersion[]
+  schedules       Schedule[]
+  runs            Run[]
+  webhooks        Webhook[]
+  tags            String[]        @default([])
+  metadata        Json            @default("{}")
+  proxyConfig     ProxyConfig?
+  antiBot         AntiBotConfig?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model ScraperVersion {
+  id          String   @id @default(cuid())
+  scraper     Scraper  @relation(fields: [scraperId], references: [id])
+  scraperId   String
+  version     Int      @default(1)
+  prompt      String   
+  selectors   Json     
+  engineHint  String?  
+  screenshot  String?  
+  performance Json     @default("{}")
+  accuracy    Float?   
+  runs        Run[]
+  createdAt   DateTime @default(now())
+}
+
+model Run {
+  id            String          @id @default(cuid())
+  scraper       Scraper         @relation(fields: [scraperId], references: [id])
+  scraperId     String
+  version       ScraperVersion? @relation(fields: [versionId], references: [id])
+  versionId     String?
+  status        RunStatus       @default(PENDING)
+  result        Json?
+  error         String?
+  metrics       RunMetrics?
+  variables     Json            @default("{}")
+  triggeredBy   String?         @default("manual")
+  startedAt     DateTime? 
+  finishedAt    DateTime?
+  createdAt     DateTime        @default(now())
+}
+
+model RunMetrics {
+  id              String   @id @default(cuid())
+  run             Run      @relation(fields: [runId], references: [id])
+  runId           String   @unique
+  itemsExtracted  Int      @default(0)
+  executionTime   Int      @default(0) // milliseconds
+  memoryUsed      Int      @default(0) // MB
+  engineUsed      String
+  errors          Int      @default(0)
+  retries         Int      @default(0)
+}
+
+model Schedule {
+  id          String   @id @default(cuid())
+  scraper     Scraper  @relation(fields: [scraperId], references: [id])
+  scraperId   String
+  cron        String   
+  timezone    String   @default("UTC")
+  active      Boolean  @default(true)
+  lastRun     DateTime?
+  nextRun     DateTime?
+  createdAt   DateTime @default(now())
+}
+
+model Webhook {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  scraper     Scraper?    @relation(fields: [scraperId], references: [id])
+  scraperId   String?
+  url         String
+  events      String[]    @default([])
+  active      Boolean     @default(true)
+  secret      String?
+  attempts    Int         @default(0)
+  lastSuccess DateTime?
+  createdAt   DateTime    @default(now())
+}
+
+model Export {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  format      ExportFormat
+  filters     Json        @default("{}")
+  status      ExportStatus @default(PENDING)
+  url         String?
+  size        Int?
+  expiresAt   DateTime?
+  createdAt   DateTime    @default(now())
+}
+
+model ProxyConfig {
+  id          String   @id @default(cuid())
+  scraper     Scraper  @relation(fields: [scraperId], references: [id])
+  scraperId   String   @unique
+  enabled     Boolean  @default(false)
+  rotation    Boolean  @default(true)
+  providers   String[] @default([])
+  config      Json     @default("{}")
+}
+
+model AntiBotConfig {
+  id          String   @id @default(cuid())
+  scraper     Scraper  @relation(fields: [scraperId], references: [id])
+  scraperId   String   @unique
+  stealth     Boolean  @default(true)
+  delays      Json     @default("{}")
+  userAgents  String[] @default([])
+  cookies     Json     @default("{}")
+}
+
+enum Plan {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+enum RunStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+enum ScraperStatus {
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum ExportFormat {
+  CSV
+  JSON
+  XLSX
+  XML
+}
+
+enum ExportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}

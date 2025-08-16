@@ -1,0 +1,814 @@
+{
+  "info": {
+    "name": "Khoj Advanced API",
+    "description": "Complete API collection for Khoj Advanced - AI-Powered Web Scraping Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "2.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:4000",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "your-api-key-here",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "your-jwt-token-here",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "x-api-key",
+        "value": "{{api_key}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Health & Status",
+      "item": [
+        {
+          "name": "API Welcome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Get API welcome page with available endpoints"
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Check API health status"
+          }
+        },
+        {
+          "name": "System Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/metrics",
+              "host": ["{{base_url}}"],
+              "path": ["metrics"]
+            },
+            "description": "Get system metrics and statistics"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Scrapers",
+      "item": [
+        {
+          "name": "List All Scrapers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/scrapers",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "scrapers"]
+            },
+            "description": "Get all scrapers for the authenticated user"
+          }
+        },
+        {
+          "name": "Create New Scraper",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"E-commerce Product Scraper\",\n  \"url\": \"https://example.com/products\",\n  \"prompt\": \"Extract product titles, prices, descriptions, and ratings\",\n  \"engine\": \"auto\",\n  \"schedule\": \"0 */6 * * *\",\n  \"antiBotConfig\": {\n    \"stealth\": true,\n    \"delays\": {\n      \"min\": 1000,\n      \"max\": 3000\n    }\n  },\n  \"proxyConfig\": {\n    \"enabled\": false,\n    \"rotation\": true,\n    \"providers\": []\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/scrapers",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "scrapers"]
+            },
+            "description": "Create a new web scraper with AI-powered selector generation"
+          }
+        },
+        {
+          "name": "Get Scraper by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/scrapers/:id",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "scrapers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "scraper-id-here",
+                  "description": "Scraper ID"
+                }
+              ]
+            },
+            "description": "Get detailed information about a specific scraper"
+          }
+        },
+        {
+          "name": "Update Scraper",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated E-commerce Scraper\",\n  \"url\": \"https://example.com/products\",\n  \"prompt\": \"Extract product titles, prices, descriptions, ratings, and availability\",\n  \"status\": \"ACTIVE\",\n  \"antiBotConfig\": {\n    \"stealth\": true,\n    \"delays\": {\n      \"min\": 2000,\n      \"max\": 5000\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/scrapers/:id",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "scrapers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "scraper-id-here",
+                  "description": "Scraper ID"
+                }
+              ]
+            },
+            "description": "Update an existing scraper configuration"
+          }
+        },
+        {
+          "name": "Delete Scraper",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/scrapers/:id",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "scrapers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "scraper-id-here",
+                  "description": "Scraper ID"
+                }
+              ]
+            },
+            "description": "Delete a scraper and all its associated data"
+          }
+        },
+        {
+          "name": "Run Scraper",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"variables\": {\n    \"category\": \"electronics\",\n    \"limit\": 10\n  },\n  \"options\": {\n    \"screenshot\": true,\n    \"timeout\": 30000\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/scrapers/:id/run",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "scrapers", ":id", "run"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "scraper-id-here",
+                  "description": "Scraper ID"
+                }
+              ]
+            },
+            "description": "Manually trigger a scraper run"
+          }
+        },
+        {
+          "name": "Get Scraper Runs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/scrapers/:id/runs?limit=10&status=SUCCESS",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "scrapers", ":id", "runs"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of runs to return"
+                },
+                {
+                  "key": "status",
+                  "value": "SUCCESS",
+                  "description": "Filter by run status"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "scraper-id-here",
+                  "description": "Scraper ID"
+                }
+              ]
+            },
+            "description": "Get run history for a specific scraper"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Runs",
+      "item": [
+        {
+          "name": "List All Runs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/runs?limit=20&status=SUCCESS",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "runs"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Number of runs to return"
+                },
+                {
+                  "key": "status",
+                  "value": "SUCCESS",
+                  "description": "Filter by run status"
+                }
+              ]
+            },
+            "description": "Get all scraper runs with optional filtering"
+          }
+        },
+        {
+          "name": "Get Run Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/runs/:id",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "runs", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "run-id-here",
+                  "description": "Run ID"
+                }
+              ]
+            },
+            "description": "Get detailed information about a specific run"
+          }
+        },
+        {
+          "name": "Cancel Running Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/runs/:id/cancel",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "runs", ":id", "cancel"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "run-id-here",
+                  "description": "Run ID"
+                }
+              ]
+            },
+            "description": "Cancel a running scraper job"
+          }
+        },
+        {
+          "name": "Get Run Result",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/runs/:id/result",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "runs", ":id", "result"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "run-id-here",
+                  "description": "Run ID"
+                }
+              ]
+            },
+            "description": "Get the extracted data from a completed run"
+          }
+        },
+        {
+          "name": "Get Run Screenshot",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/runs/:id/screenshot",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "runs", ":id", "screenshot"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "run-id-here",
+                  "description": "Run ID"
+                }
+              ]
+            },
+            "description": "Get the screenshot taken during a run (if enabled)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Exports",
+      "item": [
+        {
+          "name": "List All Exports",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/exports",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "exports"]
+            },
+            "description": "Get all export jobs"
+          }
+        },
+        {
+          "name": "Create Export",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"format\": \"xlsx\",\n  \"filters\": {\n    \"scraperId\": \"scraper-id-here\",\n    \"dateFrom\": \"2024-01-01T00:00:00Z\",\n    \"status\": \"SUCCESS\"\n  },\n  \"fields\": [\"title\", \"price\", \"description\", \"rating\"],\n  \"includeMetadata\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/exports",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "exports"]
+            },
+            "description": "Create a new export job for scraped data"
+          }
+        },
+        {
+          "name": "Get Export Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/exports/:id",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "exports", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "export-id-here",
+                  "description": "Export ID"
+                }
+              ]
+            },
+            "description": "Get details about a specific export job"
+          }
+        },
+        {
+          "name": "Download Export",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/exports/:id/download",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "exports", ":id", "download"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "export-id-here",
+                  "description": "Export ID"
+                }
+              ]
+            },
+            "description": "Download the exported file"
+          }
+        },
+        {
+          "name": "Delete Export",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/exports/:id",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "exports", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "export-id-here",
+                  "description": "Export ID"
+                }
+              ]
+            },
+            "description": "Delete an export job and its file"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "item": [
+        {
+          "name": "List All Webhooks",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/webhooks",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "webhooks"]
+            },
+            "description": "Get all webhook configurations"
+          }
+        },
+        {
+          "name": "Create Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://your-webhook-endpoint.com/webhook\",\n  \"events\": [\"run_completed\", \"run_failed\"],\n  \"scraperId\": \"scraper-id-here\",\n  \"secret\": \"your-webhook-secret\",\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/webhooks",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "webhooks"]
+            },
+            "description": "Create a new webhook configuration"
+          }
+        },
+        {
+          "name": "Update Webhook",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://updated-webhook-endpoint.com/webhook\",\n  \"events\": [\"run_completed\", \"run_failed\", \"scraper_updated\"],\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/webhooks/:id",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "webhooks", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "webhook-id-here",
+                  "description": "Webhook ID"
+                }
+              ]
+            },
+            "description": "Update an existing webhook configuration"
+          }
+        },
+        {
+          "name": "Delete Webhook",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/webhooks/:id",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "webhooks", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "webhook-id-here",
+                  "description": "Webhook ID"
+                }
+              ]
+            },
+            "description": "Delete a webhook configuration"
+          }
+        },
+        {
+          "name": "Test Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/webhooks/:id/test",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "webhooks", ":id", "test"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "webhook-id-here",
+                  "description": "Webhook ID"
+                }
+              ]
+            },
+            "description": "Send a test webhook to verify the configuration"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Dashboard Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/analytics/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "analytics", "dashboard"]
+            },
+            "description": "Get dashboard analytics and overview statistics"
+          }
+        },
+        {
+          "name": "Scraper Performance",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/analytics/scrapers",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "analytics", "scrapers"]
+            },
+            "description": "Get performance analytics for all scrapers"
+          }
+        },
+        {
+          "name": "Run Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/analytics/runs",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "analytics", "runs"]
+            },
+            "description": "Get run statistics and trends"
+          }
+        },
+        {
+          "name": "Trend Analysis",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/analytics/trends?days=7",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "analytics", "trends"],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "7",
+                  "description": "Number of days for trend analysis"
+                }
+              ]
+            },
+            "description": "Get time-series trend data"
+          }
+        }
+      ]
+    },
+    {
+      "name": "WebSocket",
+      "item": [
+        {
+          "name": "WebSocket Connection",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/ws",
+              "host": ["{{base_url}}"],
+              "path": ["ws"]
+            },
+            "description": "WebSocket endpoint for real-time updates (use WebSocket client to connect)"
+          }
+        }
+      ]
+    }
+  ]
+}

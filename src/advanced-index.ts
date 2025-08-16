@@ -1,8 +1,8 @@
 import Fastify from 'fastify';
-import cors from 'fastify-cors';
-import rate from 'fastify-rate-limit';
-import multipart from 'fastify-multipart';
-import websocket from 'fastify-websocket';
+import cors from '@fastify/cors';
+import rate from '@fastify/rate-limit';
+import multipart from '@fastify/multipart';
+import websocket from '@fastify/websocket';
 import helmet from 'helmet';
 import compression from 'compression';
 
@@ -54,6 +54,21 @@ registerWebhookRoutes(app);
 registerExportRoutes(app);
 registerAnalyticsRoutes(app);
 registerWebSocketRoutes(app);
+
+// Root route
+app.get('/', async () => ({
+  message: 'Welcome to Khoj Advanced API',
+  version: process.env.npm_package_version || '2.0.0',
+  endpoints: {
+    health: '/health',
+    metrics: '/metrics',
+    scrapers: '/v1/scrapers',
+    webhooks: '/v1/webhooks',
+    exports: '/v1/exports',
+    analytics: '/v1/analytics',
+    websocket: '/ws'
+  }
+}));
 
 // Health & Monitoring
 app.get('/health', async () => ({ 
