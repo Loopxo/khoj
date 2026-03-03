@@ -33,4 +33,4 @@ jobs:
       run: npm run build
       
     - name: Run tests with Vitest and Playwright
-      run: npm run test:coverage
+      run: npm run test
