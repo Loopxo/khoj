@@ -1,6 +1,6 @@
 {
   "name": "khoji",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "An intelligent CLI tool that extracts token-optimized context, animations, and pixel-perfect clones from any website to power AI coding agents.",
   "private": false,
   "type": "module",
