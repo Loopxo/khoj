@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Sample page for Khoj fixture testing" />
+  <meta property="og:image" content="https://example.com/og.png" />
+  <meta name="theme-color" content="#6c63ff" />
+  <link rel="canonical" href="https://example.com" />
+  <link rel="icon" href="https://example.com/favicon.ico" />
+  <title>Khoj Fixture Page</title>
+  <style>
+    :root {
+      --color-primary: #6c63ff;
+      --color-secondary: #f50057;
+      --color-background: #0a0a0a;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 32px;
+      --font-size-base: 16px;
+    }
+    body { font-family: Inter, sans-serif; background: var(--color-background); color: white; }
+    h1, h2 { font-family: 'Outfit', sans-serif; }
+
+    /* CSS Animation */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero { animation: fadeInUp 0.8s ease-out; }
+
+    /* Hover Transition */
+    .card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .card:hover { transform: scale(1.03); }
+
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) { .hero h1 { font-size: 1.5rem; } }
+  </style>
+</head>
+<body>
+  <header>
+    <nav id="main-nav" aria-label="Main Navigation">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/pricing">Pricing</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <h1>Build Better AI Agents</h1>
+      <p>Khoj extracts structured context from any website so your AI can actually understand it.</p>
+      <button class="btn-primary">Get Started</button>
+      <a href="/docs" class="btn-secondary">Read the Docs</a>
+    </section>
+
+    <h2>Features</h2>
+    <div class="grid">
+      <div class="card" id="card-1">
+        <h3>Token Efficient</h3>
+        <p>Cut token usage by up to 90% vs raw HTML dumping.</p>
+        <img src="https://example.com/token-chart.png" alt="Token savings chart" width="400" height="300" />
+      </div>
+      <div class="card" id="card-2">
+        <h3>Animation Aware</h3>
+        <p>Detect CSS animations, GSAP timelines, and AOS scroll effects.</p>
+        <img src="https://example.com/animation-demo.gif" alt="Animation demo" />
+      </div>
+      <div class="card" id="card-3">
+        <h3>Design Token Extraction</h3>
+        <p>Pulls every CSS custom property automatically.</p>
+        <img src="https://example.com/design-tokens.png" alt="Design tokens screenshot" loading="lazy" />
+      </div>
+    </div>
+
+    <section>
+      <h2>Contact Us</h2>
+      <form id="contact-form" method="post" action="/submit">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" placeholder="John Doe" required />
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required />
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Tell us about your project..."></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Khoj. MIT License.</p>
+  </footer>
+
+  <script>
+    // Simulate AOS scroll animations
+    document.querySelectorAll('.card').forEach(el => {
+      el.setAttribute('data-aos', 'fade-up');
+    });
+  </script>
+</body>
+</html>
