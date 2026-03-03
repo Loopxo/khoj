@@ -13,8 +13,8 @@ dist/
 *.log
 logs/
 
-# Output files
-output/
+# Output files (generated CLI output only)
+/output/
 
 # OS
 .DS_Store
