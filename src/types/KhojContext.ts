@@ -187,4 +187,5 @@ export interface ExtractionOptions {
     cloneSkills?: string[];
     sendToGemini?: boolean;
     prompt?: string;
+    clickSelector?: string;
 }

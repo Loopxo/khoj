@@ -22,6 +22,7 @@ program
     .option('--prompt <text>', 'Custom instruction to send to Gemini along with context')
     .option('--fast', 'Fast mode: skip image loading (reduces extraction time)')
     .option('--clone', 'Clone mode: Extract full-page screenshot, raw HTML, and CSS')
+    .option('--click <selector>', 'CSS selector of an element to click before extraction (useful for "Enter Site" preloaders)')
     .action(async (url: string, options: {
         output: string;
         format: 'json' | 'markdown' | 'both';
@@ -30,6 +31,7 @@ program
         prompt?: string;
         fast?: boolean;
         clone?: boolean;
+        click?: string;
     }) => {
         logger.banner();
 
@@ -83,6 +85,7 @@ program
             cloneSkills: cloneSkills,
             sendToGemini: options.sendToGemini,
             prompt: options.prompt,
+            clickSelector: options.click,
         };
 
         // Validate format option

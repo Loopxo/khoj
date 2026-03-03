@@ -21,7 +21,7 @@ export class PageLoader {
         private readonly timeoutMs: number = 30_000,
     ) { }
 
-    async load(url: string): Promise<LoadResult> {
+    async load(url: string, clickSelector?: string): Promise<LoadResult> {
         const page = await this.context.newPage();
         const start = Date.now();
 
@@ -52,6 +52,19 @@ export class PageLoader {
 
             if (statusCode !== null && statusCode >= 400) {
                 logger.warn(`Server responded with HTTP ${statusCode} for ${url}`);
+            }
+
+            // Handle Click-to-Enter Preloaders
+            if (clickSelector) {
+                logger.step('🖱️', `Found --click flag. Waiting for and clicking: ${clickSelector}`);
+                try {
+                    await page.waitForSelector(clickSelector, { timeout: 10000 });
+                    await page.click(clickSelector);
+                    // Wait 3 seconds for intro animations/overlays to fade out
+                    await page.waitForTimeout(3000);
+                } catch (e) {
+                    logger.warn(`Failed to click selector "${clickSelector}". Proceeding anyway.`);
+                }
             }
 
             // Auto-scroll the page to trigger lazy-loaded images and intersection observers (scroll animations)

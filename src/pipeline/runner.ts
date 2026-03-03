@@ -28,7 +28,7 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
         const loader = new PageLoader(context, opts.timeout);
 
         logger.step('🚀', `Loading page (${mode} mode)...`);
-        const { page, finalUrl, loadTime } = await loader.load(opts.url);
+        const { page, finalUrl, loadTime } = await loader.load(opts.url, opts.clickSelector);
 
         logger.step('⚙️', 'Running extraction pipeline (parallel)...');
         logger.divider();

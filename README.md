@@ -25,8 +25,18 @@ Khoj can be run instantly, or installed either globally or locally to suit your 
 ### 1. Run Instantly (No Install)
 If you don't want to install anything, you can run Khoj directly using `npx`:
 ```bash
-npx khoj https://example.com
+npx khoj https://example.com --send-to-gemini --prompt "Identify all primary call-to-action buttons."
 ```
+
+### Bypassing "Click to Enter" Preloaders
+Many high-end award-winning sites hide their entire layout behind an initial "Click to Enter" or "Start Experience" overlay screen. If you extract the site normally, you will only capture the loader screen.
+
+To bypass this natively, inspect the website to find the CSS Selector of the start button (e.g., `#enter-button` or `.preloader-enter`), and pass it to Khoj using the `--click` flag:
+
+```bash
+npx khoj https://dich-fashion.webflow.io/ --clone --click ".preloader-enter"
+```
+Khoj will automatically navigate to the site, wait for the overlay button, click it, wait for the intro animations to clear, and *then* run the full clone extraction of the underlying page!
 
 ### 2. Install Globally
 If you plan to use Khoj frequently from your terminal:
