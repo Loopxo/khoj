@@ -1,7 +1,10 @@
 {
-  "name": "khoj",
+  "name": "@loopxo/khoj",
   "version": "2.1.4",
   "description": "An intelligent CLI tool that extracts token-optimized context, animations, and pixel-perfect clones from any website to power AI coding agents.",
+  "publishConfig": {
+    "access": "public"
+  },
   "private": false,
   "type": "module",
   "bin": {
