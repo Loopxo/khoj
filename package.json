@@ -1,7 +1,7 @@
 {
   "name": "khoj",
-  "version": "1.0.0",
-  "description": "Extract token-efficient website context for AI agents — structure, design tokens, images, animations and more.",
+  "version": "2.1.4",
+  "description": "An intelligent CLI tool that extracts token-optimized context, animations, and pixel-perfect clones from any website to power AI coding agents.",
   "private": false,
   "type": "module",
   "bin": {

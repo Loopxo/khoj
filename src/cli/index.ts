@@ -13,7 +13,7 @@ const program = new Command();
 program
     .name('khoj')
     .description('Extract token-efficient website context for AI agents')
-    .version('1.0.0')
+    .version('2.1.4')
     .argument('<url>', 'Target URL to extract context from')
     .option('-o, --output <dir>', 'Output directory', './output')
     .option('-f, --format <type>', 'Output format: json | markdown | both', 'both')
