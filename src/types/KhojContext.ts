@@ -184,6 +184,7 @@ export interface ExtractionOptions {
     timeout: number;
     fast: boolean;
     clone?: boolean;
+    cloneSkills?: string[];
     sendToGemini?: boolean;
     prompt?: string;
 }

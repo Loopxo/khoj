@@ -2,9 +2,11 @@
 import 'dotenv/config';
 import { Command } from 'commander';
 import chalk from 'chalk';
+import { confirm, checkbox } from '@inquirer/prompts';
 import { logger } from '../utils/logger.js';
 import { runExtraction } from '../pipeline/runner.js';
 import type { ExtractionOptions } from '../types/KhojContext.js';
+import type { CloneSkill } from '../prompting/PromptGenerator.js';
 
 const program = new Command();
 
@@ -41,6 +43,27 @@ program
 
         logger.step('🚀', `Starting Khoj extraction for ${chalk.cyan(url)}`);
 
+        let cloneSkills: CloneSkill[] = [];
+
+        if (options.clone) {
+            const wantsPrompt = await confirm({
+                message: 'Do you want to generate a custom AI instruction prompt for this clone?',
+                default: true
+            });
+
+            if (wantsPrompt) {
+                cloneSkills = await checkbox({
+                    message: 'Select the guidelines the AI should follow when rebuilding this site:',
+                    choices: [
+                        { name: 'Frontend Design (Avoid cliché AI traits)', value: 'frontend-design' },
+                        { name: 'SEO Best Practices', value: 'seo-audit' },
+                        { name: 'Web Design Guidelines (a11y, contrast)', value: 'web-design-guidelines' },
+                        { name: 'Award-Winning Site (3D, GSAP, etc.)', value: 'award-winning-website' }
+                    ]
+                });
+            }
+        }
+
         const extractOpts: ExtractionOptions = {
             url,
             outputDir: options.output,
@@ -48,6 +71,7 @@ program
             timeout: parseInt(options.timeout, 10),
             fast: options.fast ?? false, // Ensure fast is boolean
             clone: options.clone,
+            cloneSkills: cloneSkills.length > 0 ? cloneSkills : undefined,
             sendToGemini: options.sendToGemini,
             prompt: options.prompt,
         };

@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { PromptGenerator } from '../prompting/PromptGenerator.js';
 import { BrowserManager } from '../browser/BrowserManager.js';
 import { PageLoader } from '../browser/PageLoader.js';
 import { extractMeta } from '../extractors/MetaExtractor.js';
@@ -161,6 +162,15 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
             }
 
             await writeOutput(cssPath, rawCss);
+
+            // 4. Generate AI Prompt (if requested)
+            if (opts.cloneSkills) {
+                // We assert the type here because PromptGenerator expects CloneSkill[] 
+                // and the CLI ensures only valid values are passed.
+                const promptContent = PromptGenerator.generate(opts.cloneSkills as any);
+                const promptPath = path.join(outputDir, `prompt.md`);
+                await writeOutput(promptPath, promptContent);
+            }
         }
 
         // Final report
@@ -178,6 +188,9 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
             logger.stat('Screenshot', `khoj-clone-${timestamp}.png`);
             logger.stat('HTML Source', `khoj-clone-${timestamp}.html`);
             logger.stat('CSS Source', `khoj-clone-${timestamp}.css`);
+            if (opts.cloneSkills) {
+                logger.stat('System Prompt', `prompt.md`);
+            }
             logger.divider();
         }
 
