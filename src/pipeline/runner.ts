@@ -17,7 +17,7 @@ import { serializeMarkdown } from '../serializer/MarkdownSerializer.js';
 import { writeOutput } from '../output/Writer.js';
 import { estimateTokens } from '../utils/tokenEstimator.js';
 import { logger } from '../utils/logger.js';
-import type { ExtractionOptions, KhojContext } from '../types/KhojContext.js';
+import type { ExtractionOptions, KhojiContext } from '../types/KhojiContext.js';
 
 export async function runExtraction(opts: ExtractionOptions): Promise<void> {
     const browserManager = new BrowserManager();
@@ -61,7 +61,7 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
         const cleanedGifs = cleanImages(assets.gifs);
         const cleanedStructure = pruneEmptyDomNodes(structure);
 
-        const ctx: KhojContext = {
+        const ctx: KhojiContext = {
             schemaVersion: '1.0',
             url: opts.url,
             finalUrl,
@@ -101,12 +101,12 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
 
         if (opts.format === 'json' || opts.format === 'both') {
             const json = serializeJson(ctx);
-            await writeOutput(path.join(outputDir, `khoj-context-${timestamp}.json`), json);
+            await writeOutput(path.join(outputDir, `khoji-context-${timestamp}.json`), json);
         }
 
         if (opts.format === 'markdown' || opts.format === 'both') {
             const md = serializeMarkdown(ctx);
-            await writeOutput(path.join(outputDir, `khoj-context-${timestamp}.md`), md);
+            await writeOutput(path.join(outputDir, `khoji-context-${timestamp}.md`), md);
         }
 
         // Clone Mode Extraction
@@ -115,16 +115,16 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
             logger.divider();
 
             // 1. Full Page Screenshot
-            const screenshotPath = path.join(outputDir, `khoj-clone-${timestamp}.png`);
+            const screenshotPath = path.join(outputDir, `khoji-clone-${timestamp}.png`);
             await page.screenshot({ path: screenshotPath, fullPage: true });
 
             // 2. Raw HTML
             const rawHtml = await page.content();
-            const htmlPath = path.join(outputDir, `khoj-clone-${timestamp}.html`);
+            const htmlPath = path.join(outputDir, `khoji-clone-${timestamp}.html`);
             await writeOutput(htmlPath, rawHtml);
 
             // 3. Raw CSS (Inline + External)
-            const cssPath = path.join(outputDir, `khoj-clone-${timestamp}.css`);
+            const cssPath = path.join(outputDir, `khoji-clone-${timestamp}.css`);
 
             // First get all inline styles and external URLs from the browser context
             const { inlineStyles, externalUrls } = await page.evaluate(() => {
@@ -185,9 +185,9 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
 
         if (opts.clone) {
             logger.step('📸', 'Clone artifacts saved:');
-            logger.stat('Screenshot', `khoj-clone-${timestamp}.png`);
-            logger.stat('HTML Source', `khoj-clone-${timestamp}.html`);
-            logger.stat('CSS Source', `khoj-clone-${timestamp}.css`);
+            logger.stat('Screenshot', `khoji-clone-${timestamp}.png`);
+            logger.stat('HTML Source', `khoji-clone-${timestamp}.html`);
+            logger.stat('CSS Source', `khoji-clone-${timestamp}.css`);
             if (opts.cloneSkills !== undefined) {
                 logger.stat('System Prompt', `prompt.md`);
             }

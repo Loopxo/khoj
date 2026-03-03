@@ -1,5 +1,5 @@
 import type { Page } from 'playwright';
-import type { DomNode } from '../types/KhojContext.js';
+import type { DomNode } from '../types/KhojiContext.js';
 
 // Tags to skip entirely — they add noise, not signal
 const NOISE_TAGS = new Set([

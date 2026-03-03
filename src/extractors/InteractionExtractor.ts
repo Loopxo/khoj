@@ -1,5 +1,5 @@
 import type { Page } from 'playwright';
-import type { Interaction, FormField } from '../types/KhojContext.js';
+import type { Interaction, FormField } from '../types/KhojiContext.js';
 
 /**
  * Maps interactive regions of the page:

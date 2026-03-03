@@ -1,5 +1,5 @@
 import type { Page } from 'playwright';
-import type { DetectedComponent } from '../types/KhojContext.js';
+import type { DetectedComponent } from '../types/KhojiContext.js';
 
 /**
  * Detects repeated DOM structural patterns that likely represent UI components.

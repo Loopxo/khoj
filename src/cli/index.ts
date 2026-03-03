@@ -5,13 +5,13 @@ import chalk from 'chalk';
 import { confirm, checkbox } from '@inquirer/prompts';
 import { logger } from '../utils/logger.js';
 import { runExtraction } from '../pipeline/runner.js';
-import type { ExtractionOptions } from '../types/KhojContext.js';
+import type { ExtractionOptions } from '../types/KhojiContext.js';
 import type { CloneSkill } from '../prompting/PromptGenerator.js';
 
 const program = new Command();
 
 program
-    .name('khoj')
+    .name('khoji')
     .description('Extract token-efficient website context for AI agents')
     .version('2.1.4')
     .argument('<url>', 'Target URL to extract context from')
@@ -38,13 +38,12 @@ program
         // Validator — must be a valid URL
         try {
             new URL(url);
-        } catch {
-            logger.error(`Invalid URL provided: ${url}`);
-            logger.error(`Please ensure the URL includes http:// or https:// (e.g., https://${url})`);
+        } catch (e) {
+            logger.error(`Invalid URL provided: ${chalk.cyan(url)}, \n\n${chalk.dim('Please provide a full URL including the protocol:')}\n${chalk.green('Right:')} https://loopxo.org\n${chalk.red('Wrong:')} www.loopxo.org\n`);
             process.exit(1);
         }
 
-        logger.step('🚀', `Starting Khoj extraction for ${chalk.cyan(url)}`);
+        logger.step('🚀', `Starting Khoji extraction for ${chalk.cyan(url)}`);
 
         let cloneSkills: CloneSkill[] | undefined = undefined;
 

@@ -1,5 +1,5 @@
 import type { Page } from 'playwright';
-import type { PageMeta } from '../types/KhojContext.js';
+import type { PageMeta } from '../types/KhojiContext.js';
 
 /**
  * Extracts page metadata: title, description, Open Graph tags, canonical URL,

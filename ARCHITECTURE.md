@@ -1,6 +1,6 @@
-# Architecture of Khoj
+# Architecture of Khoji
 
-Khoj is built with a modular, parallelized architecture designed for speed and extensibility. Because it runs within a headless browser (Playwright), it can analyze modern single-page applications (SPAs) exactly as they render for human users.
+Khoji is built with a modular, parallelized architecture designed for speed and extensibility. Because it runs within a headless browser (Playwright), it can analyze modern single-page applications (SPAs) exactly as they render for human users.
 
 ## Core Flow
 
@@ -12,10 +12,10 @@ Khoj is built with a modular, parallelized architecture designed for speed and e
    - `PageLoader`: Navigates to the target URL and waits for the network to idle, ensuring the DOM is fully hydrated.
 
 3. **Extraction Pipeline (`src/pipeline/runner.ts`)**
-   Once the page is loaded, the runner executes a suite of specialized "Extractors" in parallel via `Promise.all()`. This is the core engine of Khoj.
+   Once the page is loaded, the runner executes a suite of specialized "Extractors" in parallel via `Promise.all()`. This is the core engine of Khoji.
 
 4. **Extractors (`src/extractors/`)**
-   Each extractor is an isolated function responsible for reading the DOM and returning a specific subset of data defined in the `KhojContext` schema:
+   Each extractor is an isolated function responsible for reading the DOM and returning a specific subset of data defined in the `KhojiContext` schema:
    - `MetaExtractor`: Title, description, canonical, JSON-LD.
    - `DomExtractor`: A cleaned, depth-capped snapshot of the HTML tree.
    - `StyleExtractor`: Computed CSS custom properties (colors, typography).
@@ -28,7 +28,7 @@ Khoj is built with a modular, parallelized architecture designed for speed and e
    Raw extracted data is cleaned to save tokens (e.g., stripping duplicate image URLs, removing empty structural nodes, truncating overly long text blocks).
 
 6. **Serialization (`src/serializer/`)**
-   The final in-memory `KhojContext` object is serialized into two formats:
+   The final in-memory `KhojiContext` object is serialized into two formats:
    - `JsonSerializer`: Directly outputs the object to JSON.
    - `MarkdownSerializer`: Converts the object into a structured Markdown document, optimized for LLM reading.
 

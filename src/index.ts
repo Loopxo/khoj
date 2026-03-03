@@ -1,7 +1,7 @@
 // Public API — import khoj as a library in your own Node.js/TypeScript project
 export { runExtraction } from './pipeline/runner.js';
 export type {
-    KhojContext,
+    KhojiContext,
     PageMeta,
     DomNode,
     DesignTokens,
@@ -23,7 +23,7 @@ export type {
     GifAnimation,
     GifAnimationPurpose,
     ExtractionOptions,
-} from './types/KhojContext.js';
+} from './types/KhojiContext.js';
 export { estimateTokens } from './utils/tokenEstimator.js';
 export { serializeJson } from './serializer/JsonSerializer.js';
 export { serializeMarkdown } from './serializer/MarkdownSerializer.js';

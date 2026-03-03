@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { chromium, type Browser, type BrowserContext, type Page } from 'playwright';
 import path from 'node:path';
 import { extractAnimations } from '../../src/extractors/AnimationExtractor.js';
-import type { ImageAsset } from '../../src/types/KhojContext.js';
+import type { ImageAsset } from '../../src/types/KhojiContext.js';
 
 describe('AnimationExtractor', () => {
     let browser: Browser;

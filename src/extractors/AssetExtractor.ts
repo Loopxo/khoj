@@ -1,5 +1,5 @@
 import type { Page } from 'playwright';
-import type { AssetMap, ImageAsset } from '../types/KhojContext.js';
+import type { AssetMap, ImageAsset } from '../types/KhojiContext.js';
 
 /**
  * Collects all assets from the page:

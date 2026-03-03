@@ -1,14 +1,14 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { logger } from '../utils/logger.js';
-import type { KhojContext } from '../types/KhojContext.js';
+import type { KhojiContext } from '../types/KhojiContext.js';
 
 const DEFAULT_MODEL = 'gemini-1.5-flash';
 
 /**
- * Sends the extracted KhojContext to Google Gemini with an optional user prompt.
+ * Sends the extracted KhojiContext to Google Gemini with an optional user prompt.
  * Streams the model response to stdout.
  */
-export async function sendToGemini(ctx: KhojContext, prompt?: string): Promise<void> {
+export async function sendToGemini(ctx: KhojiContext, prompt?: string): Promise<void> {
     const apiKey = process.env['GEMINI_API_KEY'];
     if (!apiKey) {
         logger.error('GEMINI_API_KEY is not set. Add it to your .env file.');

@@ -1,11 +1,15 @@
-# Khoj (खोज)
+<p align="center">
+  <img src="logo/khoji-logo.png" alt="Khoji Logo" width="200"/>
+</p>
 
-[![npm version](https://img.shields.io/npm/v/khoj.svg)](https://npmjs.org/package/khoj)
+# Khoji (खोज)
+
+[![npm version](https://img.shields.io/npm/v/khoji.svg)](https://npmjs.org/package/khoji)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-**Khoj** is a focused, open-source CLI tool and Node.js package that visits any public URL and extracts only the meaningful layers of the website — outputting a compact `khoj-context.json` specifically designed for AI agents (like Gemini, Claude, and GPT-4).
+**Khoji** is a focused, open-source CLI tool and Node.js package that visits any public URL and extracts only the meaningful layers of the website — outputting a compact `khoji-context.json` specifically designed for AI agents (like Gemini, Claude, and GPT-4).
 
-Raw HTML is noisy and wastes LLM tokens. Khoj solves the **token bloat problem** by stripping the noise and feeding your agent exactly what it needs to understand the page.
+Raw HTML is noisy and wastes LLM tokens. Khoji solves the **token bloat problem** by stripping the noise and feeding your agent exactly what it needs to understand the page.
 
 ## Features
 
@@ -20,52 +24,52 @@ Raw HTML is noisy and wastes LLM tokens. Khoj solves the **token bloat problem**
 
 ## Installation & Usage
 
-Khoj can be run instantly, or installed either globally or locally to suit your workflow.
+Khoji can be run instantly, or installed either globally or locally to suit your workflow.
 
 ### 1. Run Instantly (No Install)
-If you don't want to install anything, you can run Khoj directly using `npx`:
+If you don't want to install anything, you can run Khoji directly using `npx`:
 ```bash
-npx khoji https://example.com --send-to-gemini --prompt "Identify all primary call-to-action buttons."
+npx khojii https://example.com --send-to-gemini --prompt "Identify all primary call-to-action buttons."
 ```
 
 ### 3. Install as a Dev Dependency
-If you are building an AI project and want Khoj locally:
+If you are building an AI project and want Khoji locally:
 ```bash
-npm install -D khoji
-npx khoji https://example.com
+npm install -D khojii
+npx khojii https://example.com
 ```
 
 ### Bypassing "Click to Enter" Preloaders
 Many high-end award-winning sites hide their entire layout behind an initial "Click to Enter" or "Start Experience" overlay screen. If you extract the site normally, you will only capture the loader screen.
 
-To bypass this natively, inspect the website to find the CSS Selector of the start button (e.g., `#enter-button` or `.preloader-enter`), and pass it to Khoj using the `--click` flag:
+To bypass this natively, inspect the website to find the CSS Selector of the start button (e.g., `#enter-button` or `.preloader-enter`), and pass it to Khoji using the `--click` flag:
 
 ```bash
-npx khoji https://dich-fashion.webflow.io/ --clone --click ".preloader-enter"
+npx khojii https://dich-fashion.webflow.io/ --clone --click ".preloader-enter"
 ```
-Khoj will automatically navigate to the site, wait for the overlay button, click it, wait for the intro animations to clear, and *then* run the full clone extraction of the underlying page!
+Khoji will automatically navigate to the site, wait for the overlay button, click it, wait for the intro animations to clear, and *then* run the full clone extraction of the underlying page!
 
 ### 2. Install Globally
-If you plan to use Khoj frequently from your terminal:
+If you plan to use Khoji frequently from your terminal:
 ```bash
-npm install -g khoji
+npm install -g khojii
 ```
 Once installed globally, you can drop the `npx` prefix and just type:
 ```bash
-khoj https://example.com
+khoji https://example.com
 ```
 
-> **Tip:** If you just type `khoj` or `npx khoj` in your terminal without any URL, it will print out the full help menu and list all available options.
+> **Tip:** If you just type `khoji` or `npx khoji` in your terminal without any URL, it will print out the full help menu and list all available options.
 
 ### What happens next?
-Whichever way you run it, Khoj will create an `output/` folder in your **current working directory**. Inside that folder, you will find a subdirectory named after the website (e.g., `output/example.com/`). 
+Whichever way you run it, Khoji will create an `output/` folder in your **current working directory**. Inside that folder, you will find a subdirectory named after the website (e.g., `output/example.com/`). 
 
-You can then manually drag and drop these generated files (`khoj-context.json` or `khoj-context.md`) into ChatGPT, Claude, Cursor, or any other AI coding agent as highly-efficient context!
+You can then manually drag and drop these generated files (`khoji-context.json` or `khoji-context.md`) into ChatGPT, Claude, Cursor, or any other AI coding agent as highly-efficient context!
 
 ### Options
 
 ```bash
-Usage: khoj <url> [options]
+Usage: khoji <url> [options]
 
 Extract token-efficient website context for AI agents
 
@@ -90,14 +94,14 @@ All extracted data is automatically placed in a subdirectory named after the tar
 
 ### Programmatic API
 
-You can use Khoj within your own Node.js or TypeScript projects:
+You can use Khoji within your own Node.js or TypeScript projects:
 
 ```bash
-npm install khoj playwright
+npm install khoji playwright
 ```
 
 ```typescript
-import { runExtraction } from 'khoj';
+import { runExtraction } from 'khoji';
 
 await runExtraction({
   url: 'https://example.com',
@@ -110,9 +114,9 @@ await runExtraction({
 
 ## Output Structure
 
-Khoj produces a structured JSON output (and an optional Markdown summary). See the [JSON Schema definition](./khoj-context.schema.json).
+Khoji produces a structured JSON output (and an optional Markdown summary). See the [JSON Schema definition](./khoji-context.schema.json).
 
-Key sections in `khoj-context.json`:
+Key sections in `khoji-context.json`:
 - `meta`: Page title, OpenGraph image, theme-color, JSON-LD
 - `structure`: Cleaned semantic tree
 - `designTokens`: Colors, fonts, typography, spacing, breakpoints
@@ -124,9 +128,9 @@ Key sections in `khoj-context.json`:
 
 ### Clone Mode Artifacts
 When using the `--clone` flag, three additional raw files are saved directly into the domain folder:
-- **`khoj-clone-YYYY-MM-DD.png`**: A full-page visual screenshot captured by Playwright.
-- **`khoj-clone-YYYY-MM-DD.html`**: The fully hydrated, raw HTML source code.
-- **`khoj-clone-YYYY-MM-DD.css`**: All styling rules needed for pixel-perfect cloning (combines inline `<style>` and external `<link rel="stylesheet">` tags).
+- **`khoji-clone-YYYY-MM-DD.png`**: A full-page visual screenshot captured by Playwright.
+- **`khoji-clone-YYYY-MM-DD.html`**: The fully hydrated, raw HTML source code.
+- **`khoji-clone-YYYY-MM-DD.css`**: All styling rules needed for pixel-perfect cloning (combines inline `<style>` and external `<link rel="stylesheet">` tags).
 
 ## Requirements
 - Node.js >= 18

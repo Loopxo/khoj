@@ -8,7 +8,7 @@ import type {
     GifAnimation,
     GifAnimationPurpose,
     ImageAsset,
-} from '../types/KhojContext.js';
+} from '../types/KhojiContext.js';
 
 type GifPurpose = 'loading-spinner' | 'product-demo' | 'decorative' | 'tutorial' | 'unknown';
 
@@ -304,5 +304,5 @@ function buildSummary(
     return parts.length > 0 ? parts.join('. ') + '.' : 'No animations detected.';
 }
 
-// Re-export types used by KhojContext to satisfy TypeScript — avoids unused import warnings
+// Re-export types used by KhojiContext to satisfy TypeScript — avoids unused import warnings
 export type { GifAnimationPurpose };

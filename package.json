@@ -5,7 +5,7 @@
   "private": false,
   "type": "module",
   "bin": {
-    "khoj": "dist/cli/index.js"
+    "khoji": "dist/cli/index.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,11 +28,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vijeet-shah/khoj.git"
+    "url": "https://github.com/Loopxo/khoji.git"
   },
-  "homepage": "https://github.com/vijeet-shah/khoj#readme",
+  "homepage": "https://github.com/Loopxo/khoji#readme",
   "bugs": {
-    "url": "https://github.com/vijeet-shah/khoj/issues"
+    "url": "https://github.com/Loopxo/khoji/issues"
   },
   "scripts": {
     "dev": "tsx watch src/cli/index.ts",

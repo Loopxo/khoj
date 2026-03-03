@@ -29,7 +29,7 @@ describe('End-to-End Extraction Pipeline', () => {
         }
     });
 
-    it('runs the full extraction pipeline and generates valid khoj-context files', async () => {
+    it('runs the full extraction pipeline and generates valid khoji-context files', async () => {
         // Run the extraction (writes to outputDir)
         await runExtraction({
             url: fixturePath,

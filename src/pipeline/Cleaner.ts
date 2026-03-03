@@ -1,4 +1,4 @@
-import type { ContentBlock, DomNode, ImageAsset } from '../types/KhojContext.js';
+import type { ContentBlock, DomNode, ImageAsset } from '../types/KhojiContext.js';
 
 /**
  * Post-processing pipeline:

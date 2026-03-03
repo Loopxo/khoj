@@ -1,5 +1,5 @@
 import type { Page } from 'playwright';
-import type { ContentBlock } from '../types/KhojContext.js';
+import type { ContentBlock } from '../types/KhojiContext.js';
 
 const MAX_PARAGRAPH_LENGTH = 300;
 

@@ -1,10 +1,10 @@
-import type { KhojContext, ContentBlock, Interaction, CSSAnimation, CSSTransition, JSAnimation, ScrollAnimation, GifAnimation } from '../types/KhojContext.js';
+import type { KhojiContext, ContentBlock, Interaction, CSSAnimation, CSSTransition, JSAnimation, ScrollAnimation, GifAnimation } from '../types/KhojiContext.js';
 
 /**
- * Serializes a KhojContext into a markdown document optimised for LLM readability.
+ * Serializes a KhojiContext into a markdown document optimised for LLM readability.
  * Sections are ordered from most to least relevant for AI agents.
  */
-export function serializeMarkdown(ctx: KhojContext): string {
+export function serializeMarkdown(ctx: KhojiContext): string {
     const lines: string[] = [];
 
     lines.push(`# Khoj Context — ${ctx.meta.title || ctx.url}`);

@@ -1,9 +1,9 @@
-// ─── KhojContext ────────────────────────────────────────────────────────────
-// Master TypeScript interface for the khoj-context.json output.
+// ─── KhojiContext ────────────────────────────────────────────────────────────
+// Master TypeScript interface for the khoji-context.json output.
 // This is the source of truth — all extractors must conform to these types.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export interface KhojContext {
+export interface KhojiContext {
     schemaVersion: '1.0';
     url: string;
     finalUrl: string;             // after redirects

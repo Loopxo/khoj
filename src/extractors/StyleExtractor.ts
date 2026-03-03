@@ -1,5 +1,5 @@
 import type { Page } from 'playwright';
-import type { DesignTokens } from '../types/KhojContext.js';
+import type { DesignTokens } from '../types/KhojiContext.js';
 
 /**
  * Extracts design tokens from the page's stylesheets:
