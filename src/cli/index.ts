@@ -44,7 +44,7 @@ program
 
         logger.step('🚀', `Starting Khoj extraction for ${chalk.cyan(url)}`);
 
-        let cloneSkills: CloneSkill[] = [];
+        let cloneSkills: CloneSkill[] | undefined = undefined;
 
         if (options.clone) {
             const wantsPrompt = await confirm({
@@ -53,15 +53,23 @@ program
             });
 
             if (wantsPrompt) {
-                cloneSkills = await checkbox({
-                    message: 'Select the guidelines the AI should follow when rebuilding this site:',
+                const selections = await checkbox({
+                    message: 'Select the guidelines the AI should follow when rebuilding this site (Press <space> to select):',
                     choices: [
+                        { name: '★ All of the above', value: 'all' },
                         { name: 'Frontend Design (Avoid cliché AI traits)', value: 'frontend-design' },
                         { name: 'SEO Best Practices', value: 'seo-audit' },
                         { name: 'Web Design Guidelines (a11y, contrast)', value: 'web-design-guidelines' },
                         { name: 'Award-Winning Site (3D, GSAP, etc.)', value: 'award-winning-website' }
                     ]
                 });
+
+                if (selections.includes('all')) {
+                    cloneSkills = ['frontend-design', 'seo-audit', 'web-design-guidelines', 'award-winning-website'];
+                } else {
+                    // Safe cast since the only non-CloneSkill option is 'all'
+                    cloneSkills = selections as CloneSkill[];
+                }
             }
         }
 
@@ -72,7 +80,7 @@ program
             timeout: parseInt(options.timeout, 10),
             fast: options.fast ?? false, // Ensure fast is boolean
             clone: options.clone,
-            cloneSkills: cloneSkills.length > 0 ? cloneSkills : undefined,
+            cloneSkills: cloneSkills,
             sendToGemini: options.sendToGemini,
             prompt: options.prompt,
         };

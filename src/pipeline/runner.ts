@@ -164,7 +164,7 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
             await writeOutput(cssPath, rawCss);
 
             // 4. Generate AI Prompt (if requested)
-            if (opts.cloneSkills) {
+            if (opts.cloneSkills !== undefined) {
                 // We assert the type here because PromptGenerator expects CloneSkill[] 
                 // and the CLI ensures only valid values are passed.
                 const promptContent = PromptGenerator.generate(opts.cloneSkills as any);
@@ -188,7 +188,7 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
             logger.stat('Screenshot', `khoj-clone-${timestamp}.png`);
             logger.stat('HTML Source', `khoj-clone-${timestamp}.html`);
             logger.stat('CSS Source', `khoj-clone-${timestamp}.css`);
-            if (opts.cloneSkills) {
+            if (opts.cloneSkills !== undefined) {
                 logger.stat('System Prompt', `prompt.md`);
             }
             logger.divider();
