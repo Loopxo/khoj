@@ -68,29 +68,50 @@ export class PageLoader {
             }
 
             // Auto-scroll the page to trigger lazy-loaded images and intersection observers (scroll animations)
-            logger.step('⏬', 'Scrolling page to trigger animations & lazy-loading...');
-            await page.evaluate(async () => {
-                await new Promise<void>((resolve) => {
-                    let totalHeight = 0;
-                    const distance = 150;
-                    const maxScrolls = 100; // Safeguard against infinite scroll pages
-                    let scrolls = 0;
+            // We use native mouse.wheel events here instead of window.scrollBy because award-winning 
+            // websites often use Virtual Scroll libraries (Locomotive, Lenis) that ONLY respond to real WheelEvents.
+            logger.step('⏬', 'Scrolling page to trigger GSAP/Virtual-Scroll animations & lazy-loading...');
 
-                    const timer = setInterval(() => {
-                        const scrollHeight = document.body.scrollHeight;
-                        window.scrollBy(0, distance);
-                        totalHeight += distance;
-                        scrolls++;
+            // Move mouse to center of screen to ensure wheel events are captured by the main body
+            const viewport = page.viewportSize();
+            if (viewport) {
+                await page.mouse.move(viewport.width / 2, viewport.height / 2);
+            }
 
-                        if (totalHeight >= scrollHeight || scrolls >= maxScrolls) {
-                            clearInterval(timer);
-                            // Scroll instantly back to top so screenshot looks normal
-                            window.scrollTo(0, 0);
-                            resolve();
-                        }
-                    }, 100); // 100ms per 150px provides a smooth enough scroll for triggers
+            let previousScrollY = -1;
+            let unchangedCount = 0;
+            const maxScrolls = 50;
+
+            for (let i = 0; i < maxScrolls; i++) {
+                await page.mouse.wheel(0, 400); // 400px per scroll tick
+                // Wait 150ms for smooth scroll momentum (Lenis/Locomotive) AND animations to render
+                await page.waitForTimeout(150);
+
+                const scrollData = await page.evaluate(() => {
+                    return {
+                        scrollY: window.scrollY,
+                        scrollHeight: document.body.scrollHeight,
+                        innerHeight: window.innerHeight
+                    };
                 });
-            });
+
+                if (scrollData.scrollY === previousScrollY) {
+                    unchangedCount++;
+                    // If height hasn't changed for 5 ticks, we hit bottom or scroll is fully hijacked
+                    if (unchangedCount > 5) break;
+                } else {
+                    unchangedCount = 0;
+                }
+                previousScrollY = scrollData.scrollY;
+
+                // Break if we natively hit the bottom bounds
+                if (scrollData.scrollY + scrollData.innerHeight >= scrollData.scrollHeight - 10) {
+                    break;
+                }
+            }
+
+            // Scroll instantly back to top so screenshot looks normal
+            await page.evaluate(() => window.scrollTo(0, 0));
 
             // Extra settle time for single-page apps running animations or deferred renders
             await page.waitForTimeout(1000);
