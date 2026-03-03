@@ -2,7 +2,7 @@
   <img src="logo/khoji-logo.png" alt="Khoji Logo" width="200"/>
 </p>
 
-# Khoji (खोज)
+# Khoji (खोजी)
 
 [![npm version](https://img.shields.io/npm/v/khoji.svg)](https://npmjs.org/package/khoji)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
