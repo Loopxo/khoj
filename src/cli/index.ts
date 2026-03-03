@@ -38,6 +38,7 @@ program
             new URL(url);
         } catch {
             logger.error(`Invalid URL provided: ${url}`);
+            logger.error(`Please ensure the URL includes http:// or https:// (e.g., https://${url})`);
             process.exit(1);
         }
 
