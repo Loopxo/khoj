@@ -4,11 +4,14 @@ Thank you for your interest in contributing to Khoj! We want this tool to be the
 
 ## Project Structure
 
+For a deep dive into how Khoj works under the hood, read the [ARCHITECTURE.md](ARCHITECTURE.md) guide.
+
 - `src/cli/` - The commander CLI entry point
 - `src/browser/` - Playwright browser and page loading
 - `src/extractors/` - Individual modules that extract specific data (DOM, Styles, Assets, etc.)
 - `src/pipeline/` - Orchestration (parallel execution) and post-processing (cleaning)
 - `src/serializer/` - JSON and Markdown formatting
+- `src/output/` - Domain-specific directory creation and file writing
 - `src/types/` - The master `KhojContext` TS interface. **This is the source of truth.**
 - `tests/unit/` - Fast Vitest unit tests against a static fixture
 - `tests/integration/` - End-to-end extraction against the fixture page

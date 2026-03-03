@@ -15,15 +15,35 @@ Raw HTML is noisy and wastes LLM tokens. Khoj solves the **token bloat problem**
 - **Semantic DOM**: Provides a clean, depth-capped, text-truncated structural tree.
 - **Component Detection**: Automatically flags repeating patterns (e.g., Cards, ListItems).
 - **Interactive Map**: Extracts forms, fields, and navigation menus.
+- **Clone Mode**: Extracts a full-page PNG screenshot, the raw HTML, and a concatenated CSS file for pixel-perfect AI reproduction.
 - **Gemini Native**: Built-in `--send-to-gemini` flag to pipe context straight to an LLM.
 
-## Quick Start
+## Installation & Usage
 
-Run Khoj instantly without installing:
+Khoj can be run instantly, or installed either globally or locally to suit your workflow.
 
+### 1. Run Instantly (No Install)
+If you don't want to install anything, you can run Khoj directly using `npx`:
 ```bash
-npx khoj https://stripe.com
+npx khoj https://example.com
 ```
+
+### 2. Install Globally
+If you plan to use Khoj frequently from your terminal:
+```bash
+npm install -g khoj
+```
+Once installed globally, you can drop the `npx` prefix and just type:
+```bash
+khoj https://example.com
+```
+
+> **Tip:** If you just type `khoj` or `npx khoj` in your terminal without any URL, it will print out the full help menu and list all available options.
+
+### What happens next?
+Whichever way you run it, Khoj will create an `output/` folder in your **current working directory**. Inside that folder, you will find a subdirectory named after the website (e.g., `output/example.com/`). 
+
+You can then manually drag and drop these generated files (`khoj-context.json` or `khoj-context.md`) into ChatGPT, Claude, Cursor, or any other AI coding agent as highly-efficient context!
 
 ### Options
 
@@ -40,13 +60,18 @@ Options:
   -f, --format <type>  Output format: json | markdown | both (default: "both")
   -t, --timeout <ms>   Page load timeout in milliseconds (default: "30000")
   --fast               Fast mode: skip image loading (reduces extraction time)
+  --clone              Clone mode: Extract full-page screenshot, raw HTML, and CSS
   --send-to-gemini     Send output to Gemini API after extraction
   --prompt <text>      Custom instruction to send to Gemini along with context
   -V, --version        output the version number
   -h, --help           display help for command
 ```
 
-## Programmatic API
+## Output Structure
+
+All extracted data is automatically placed in a subdirectory named after the target domain (e.g., `./output/stripe.com/`).
+
+### Programmatic API
 
 You can use Khoj within your own Node.js or TypeScript projects:
 
@@ -79,6 +104,12 @@ Key sections in `khoj-context.json`:
 - `content`: Extracted headings, buttons, and text blocks
 - `interactions`: Actionable forms and nav menus
 - `animations`: CSS keyframes, transitions, JS libraries (GSAP, Framer), and GIF intents.
+
+### Clone Mode Artifacts
+When using the `--clone` flag, three additional raw files are saved directly into the domain folder:
+- **`khoj-clone-YYYY-MM-DD.png`**: A full-page visual screenshot captured by Playwright.
+- **`khoj-clone-YYYY-MM-DD.html`**: The fully hydrated, raw HTML source code.
+- **`khoj-clone-YYYY-MM-DD.css`**: All styling rules needed for pixel-perfect cloning (combines inline `<style>` and external `<link rel="stylesheet">` tags).
 
 ## Requirements
 - Node.js >= 18

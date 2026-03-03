@@ -183,6 +183,7 @@ export interface ExtractionOptions {
     format: 'json' | 'markdown' | 'both';
     timeout: number;
     fast: boolean;
+    clone?: boolean;
     sendToGemini?: boolean;
     prompt?: string;
 }

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import 'dotenv/config';
 import { Command } from 'commander';
 import chalk from 'chalk';
@@ -18,6 +19,7 @@ program
     .option('--send-to-gemini', 'Send output to Gemini API after extraction')
     .option('--prompt <text>', 'Custom instruction to send to Gemini along with context')
     .option('--fast', 'Fast mode: skip image loading (reduces extraction time)')
+    .option('--clone', 'Clone mode: Extract full-page screenshot, raw HTML, and CSS')
     .action(async (url: string, options: {
         output: string;
         format: 'json' | 'markdown' | 'both';
@@ -25,6 +27,7 @@ program
         sendToGemini?: boolean;
         prompt?: string;
         fast?: boolean;
+        clone?: boolean;
     }) => {
         logger.banner();
 
@@ -44,6 +47,7 @@ program
             format: options.format, // Type assertion handled by options type
             timeout: parseInt(options.timeout, 10),
             fast: options.fast ?? false, // Ensure fast is boolean
+            clone: options.clone,
             sendToGemini: options.sendToGemini,
             prompt: options.prompt,
         };
@@ -71,5 +75,10 @@ program
             process.exit(1);
         }
     });
+
+if (!process.argv.slice(2).length) {
+    program.outputHelp();
+    process.exit(0);
+}
 
 program.parseAsync(process.argv);

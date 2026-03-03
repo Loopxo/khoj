@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import { BrowserManager } from '../browser/BrowserManager.js';
 import { PageLoader } from '../browser/PageLoader.js';
@@ -91,7 +92,11 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
         logger.divider();
 
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-        const outputDir = path.resolve(opts.outputDir);
+
+        // Create a domain-specific subdirectory
+        const hostname = new URL(opts.url).hostname.replace(/^www\./, '');
+        const outputDir = path.resolve(opts.outputDir, hostname);
+        await fs.mkdir(outputDir, { recursive: true });
 
         if (opts.format === 'json' || opts.format === 'both') {
             const json = serializeJson(ctx);
@@ -103,6 +108,61 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
             await writeOutput(path.join(outputDir, `khoj-context-${timestamp}.md`), md);
         }
 
+        // Clone Mode Extraction
+        if (opts.clone) {
+            logger.step('📸', 'Extracting clone assets (Screenshot, HTML, CSS)...');
+            logger.divider();
+
+            // 1. Full Page Screenshot
+            const screenshotPath = path.join(outputDir, `khoj-clone-${timestamp}.png`);
+            await page.screenshot({ path: screenshotPath, fullPage: true });
+
+            // 2. Raw HTML
+            const rawHtml = await page.content();
+            const htmlPath = path.join(outputDir, `khoj-clone-${timestamp}.html`);
+            await writeOutput(htmlPath, rawHtml);
+
+            // 3. Raw CSS (Inline + External)
+            const cssPath = path.join(outputDir, `khoj-clone-${timestamp}.css`);
+
+            // First get all inline styles and external URLs from the browser context
+            const { inlineStyles, externalUrls } = await page.evaluate(() => {
+                const styles = Array.from(document.querySelectorAll('style')).map(s => s.textContent || '');
+                const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+                    .map(l => l.getAttribute('href'))
+                    .filter((href): href is string => href !== null)
+                    .map(href => new URL(href, document.baseURI).href);
+
+                return { inlineStyles: styles, externalUrls: links };
+            });
+
+            let rawCss = '';
+
+            // Render inline styles
+            for (const style of inlineStyles) {
+                if (style.trim()) {
+                    rawCss += `/* Inline Style */\n${style}\n\n`;
+                }
+            }
+
+            // Fetch external styles from Node context to bypass browser CORS policies
+            for (const url of externalUrls) {
+                try {
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        const cssText = await response.text();
+                        rawCss += `/* External Style: ${url} */\n${cssText}\n\n`;
+                    } else {
+                        rawCss += `/* Failed to fetch external style (HTTP ${response.status}): ${url} */\n\n`;
+                    }
+                } catch (e) {
+                    rawCss += `/* Failed to fetch external style (Network Error): ${url} */\n\n`;
+                }
+            }
+
+            await writeOutput(cssPath, rawCss);
+        }
+
         // Final report
         logger.divider();
         logger.step('📊', 'Extraction complete');
@@ -112,6 +172,14 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
         logger.stat('Token estimate', `~${ctx.tokenEstimate.toLocaleString()} tokens`);
         logger.stat('Load time', `${(loadTime / 1000).toFixed(2)}s`);
         logger.divider();
+
+        if (opts.clone) {
+            logger.step('📸', 'Clone artifacts saved:');
+            logger.stat('Screenshot', `khoj-clone-${timestamp}.png`);
+            logger.stat('HTML Source', `khoj-clone-${timestamp}.html`);
+            logger.stat('CSS Source', `khoj-clone-${timestamp}.css`);
+            logger.divider();
+        }
 
         if (ctx.animations.summary) {
             logger.step('🎬', `Animations: ${ctx.animations.summary}`);
