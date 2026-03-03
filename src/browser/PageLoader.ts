@@ -54,8 +54,33 @@ export class PageLoader {
                 logger.warn(`Server responded with HTTP ${statusCode} for ${url}`);
             }
 
+            // Auto-scroll the page to trigger lazy-loaded images and intersection observers (scroll animations)
+            logger.step('⏬', 'Scrolling page to trigger animations & lazy-loading...');
+            await page.evaluate(async () => {
+                await new Promise<void>((resolve) => {
+                    let totalHeight = 0;
+                    const distance = 150;
+                    const maxScrolls = 100; // Safeguard against infinite scroll pages
+                    let scrolls = 0;
+
+                    const timer = setInterval(() => {
+                        const scrollHeight = document.body.scrollHeight;
+                        window.scrollBy(0, distance);
+                        totalHeight += distance;
+                        scrolls++;
+
+                        if (totalHeight >= scrollHeight || scrolls >= maxScrolls) {
+                            clearInterval(timer);
+                            // Scroll instantly back to top so screenshot looks normal
+                            window.scrollTo(0, 0);
+                            resolve();
+                        }
+                    }, 100); // 100ms per 150px provides a smooth enough scroll for triggers
+                });
+            });
+
             // Extra settle time for single-page apps running animations or deferred renders
-            await page.waitForTimeout(800);
+            await page.waitForTimeout(1000);
 
             const loadTime = Date.now() - start;
             const finalUrl = page.url();
