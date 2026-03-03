@@ -1,6 +1,9 @@
 import 'dotenv/config';
 import { Command } from 'commander';
+import chalk from 'chalk';
 import { logger } from '../utils/logger.js';
+import { runExtraction } from '../pipeline/runner.js';
+import type { ExtractionOptions } from '../types/KhojContext.js';
 
 const program = new Command();
 
@@ -29,18 +32,30 @@ program
         try {
             new URL(url);
         } catch {
-            logger.error('Invalid URL provided. Example: khoj https://stripe.com');
+            logger.error(`Invalid URL provided: ${url}`);
             process.exit(1);
         }
 
-        const format = options.format;
-        if (!['json', 'markdown', 'both'].includes(format)) {
+        logger.step('🚀', `Starting Khoj extraction for ${chalk.cyan(url)}`);
+
+        const extractOpts: ExtractionOptions = {
+            url,
+            outputDir: options.output,
+            format: options.format, // Type assertion handled by options type
+            timeout: parseInt(options.timeout, 10),
+            fast: options.fast ?? false, // Ensure fast is boolean
+            sendToGemini: options.sendToGemini,
+            prompt: options.prompt,
+        };
+
+        // Validate format option
+        if (!['json', 'markdown', 'both'].includes(extractOpts.format)) {
             logger.error('--format must be one of: json, markdown, both');
             process.exit(1);
         }
 
-        const timeout = parseInt(options.timeout, 10);
-        if (isNaN(timeout) || timeout < 1000) {
+        // Validate timeout option
+        if (isNaN(extractOpts.timeout) || extractOpts.timeout < 1000) {
             logger.error('--timeout must be a number >= 1000 (ms)');
             process.exit(1);
         }
@@ -50,10 +65,9 @@ program
 
         try {
             // Will be wired in Phase 4 after all extractors are built
-            const { runExtraction } = await import('../pipeline/runner.js');
-            await runExtraction({ url, outputDir: options.output, format, timeout, fast: options.fast ?? false, sendToGemini: options.sendToGemini, prompt: options.prompt });
+            await runExtraction(extractOpts);
         } catch (err) {
-            logger.error('Extraction failed unexpectedly', err);
+            logger.error('Extraction failed', err);
             process.exit(1);
         }
     });
