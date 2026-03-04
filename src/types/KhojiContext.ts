@@ -13,6 +13,7 @@ export interface KhojiContext {
     meta: PageMeta;
     structure: DomNode[];
     designTokens: DesignTokens;
+    layouts: SectionLayout[];     // section-level layout blueprints
     components: DetectedComponent[];
     assets: AssetMap;
     content: ContentBlock[];
@@ -38,6 +39,67 @@ export interface DomNode {
     role?: string;
     text?: string;               // trimmed, max 200 chars
     children?: DomNode[];
+    layout?: ComputedLayout;     // computed CSS layout (flex/grid/position)
+    typography?: ComputedTypography; // computed text styles
+    backgroundImage?: string;    // url from background-image CSS
+    imageUrl?: string;           // if this node is/contains an <img>
+    imageAlt?: string;           // alt text for embedded image
+}
+
+// ─── Computed Layout ──────────────────────────────────────────────────────────
+export interface ComputedLayout {
+    display?: string;            // flex, grid, inline-flex, etc.
+    position?: string;           // absolute, relative, fixed, sticky
+    flexDirection?: string;
+    justifyContent?: string;
+    alignItems?: string;
+    gridTemplateColumns?: string;
+    gridTemplateRows?: string;
+    gap?: string;
+    width?: string;              // only non-auto values
+    height?: string;
+    minHeight?: string;
+    top?: string;
+    right?: string;
+    bottom?: string;
+    left?: string;
+    zIndex?: string;
+    transform?: string;          // rotate(), scale(), translate()
+    overflow?: string;
+    objectFit?: string;          // for img/video
+}
+
+// ─── Computed Typography ──────────────────────────────────────────────────────
+export interface ComputedTypography {
+    fontSize?: string;           // preserves vw/vh if in stylesheet
+    fontWeight?: string;
+    lineHeight?: string;
+    letterSpacing?: string;
+    textTransform?: string;
+    textAlign?: string;
+    color?: string;
+}
+
+// ─── Section Layout Blueprint ─────────────────────────────────────────────────
+export interface SectionLayout {
+    selector: string;
+    tag: string;
+    display: string;
+    columns?: string;            // grid-template-columns or flex child ratios
+    minHeight?: string;
+    backgroundColor?: string;
+    childCount: number;
+    children: SectionChild[];
+}
+
+export interface SectionChild {
+    tag: string;
+    selector: string;
+    widthPercent: number;
+    hasImage: boolean;
+    hasText: boolean;
+    objectFit?: string;
+    backgroundColor?: string;
 }
 
 // ─── Design Tokens ────────────────────────────────────────────────────────────
@@ -47,6 +109,17 @@ export interface DesignTokens {
     typography: Record<string, string>;
     fonts: string[];
     breakpoints: string[];
+    globalTypography?: GlobalTypography;
+}
+
+export interface GlobalTypography {
+    bodyFontSize: string;
+    bodyLineHeight: string;
+    bodyLetterSpacing: string;
+    bodyFontWeight: string;
+    headingFontWeight: string;
+    headingLetterSpacing: string;
+    headingLineHeight: string;
 }
 
 // ─── Components ───────────────────────────────────────────────────────────────
