@@ -10,6 +10,7 @@ import { extractAssets } from '../extractors/AssetExtractor.js';
 import { extractContent } from '../extractors/ContentExtractor.js';
 import { extractInteractions } from '../extractors/InteractionExtractor.js';
 import { extractAnimations } from '../extractors/AnimationExtractor.js';
+import { extractLayouts } from '../extractors/LayoutExtractor.js';
 import { detectComponents } from './ComponentDetector.js';
 import { cleanContent, cleanImages, cleanStringList, pruneEmptyDomNodes } from './Cleaner.js';
 import { serializeJson } from '../serializer/JsonSerializer.js';
@@ -34,7 +35,7 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
         logger.divider();
 
         // Run all extractors in parallel for performance
-        const [meta, structure, designTokens, assets, content, interactions, components] =
+        const [meta, structure, designTokens, assets, content, interactions, components, layouts] =
             await Promise.all([
                 extractMeta(page).catch(() => ({ title: '', description: '', ogImage: null, canonical: null, themeColor: null, jsonLd: [] })),
                 extractDom(page).catch(() => []),
@@ -43,6 +44,7 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
                 extractContent(page).catch(() => []),
                 extractInteractions(page).catch(() => []),
                 detectComponents(page).catch(() => []),
+                extractLayouts(page).catch(() => []),
             ]);
 
         logger.step('🎬', 'Analysing animations...');
@@ -71,6 +73,7 @@ export async function runExtraction(opts: ExtractionOptions): Promise<void> {
             meta,
             structure: cleanedStructure,
             designTokens,
+            layouts,
             components,
             assets: {
                 images: cleanedImages,

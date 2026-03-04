@@ -53,21 +53,6 @@ export async function extractDom(page: Page): Promise<DomNode[]> {
             const textSet = new Set(textBearingTags);
             const defaultDisplayMap = displayDefaults;
 
-            function getCssSelector(el: Element): string {
-                if (el.id) return `#${el.id}`;
-                const parts: string[] = [];
-                let current: Element | null = el;
-                while (current && current !== document.body && parts.length < 3) {
-                    let sel = current.tagName.toLowerCase();
-                    if (current.className && typeof current.className === 'string') {
-                        const cls = current.className.trim().split(/\s+/)[0];
-                        if (cls) sel += `.${cls}`;
-                    }
-                    parts.unshift(sel);
-                    current = current.parentElement;
-                }
-                return parts.join(' > ');
-            }
 
             function extractLayout(el: Element, tag: string): ComputedLayout | undefined {
                 const cs = window.getComputedStyle(el);
@@ -140,9 +125,7 @@ export async function extractDom(page: Page): Promise<DomNode[]> {
 
                 // Width/Height — only non-auto explicitly set values
                 const w = cs.width;
-                const h = cs.height;
                 if (w && !w.startsWith('auto')) {
-                    const rect = el.getBoundingClientRect();
                     // Only capture if it's percentage-like or viewport-relative
                     if (w.includes('%') || w.includes('vw') || w.includes('vh')) {
                         layout.width = w; hasData = true;

@@ -1,4 +1,4 @@
-import type { KhojiContext, ContentBlock, Interaction, CSSAnimation, CSSTransition, JSAnimation, ScrollAnimation, GifAnimation } from '../types/KhojiContext.js';
+import type { KhojiContext, ContentBlock, Interaction, CSSAnimation, CSSTransition, JSAnimation, ScrollAnimation, GifAnimation, SectionLayout } from '../types/KhojiContext.js';
 
 /**
  * Serializes a KhojiContext into a markdown document optimised for LLM readability.
@@ -42,7 +42,38 @@ export function serializeMarkdown(ctx: KhojiContext): string {
     if (ctx.designTokens.breakpoints.length > 0) {
         lines.push(`\n### Breakpoints\n${ctx.designTokens.breakpoints.map((b) => `- ${b}`).join('\n')}`);
     }
+
+    if (ctx.designTokens.globalTypography) {
+        const gt = ctx.designTokens.globalTypography;
+        lines.push('\n### Global Typography');
+        lines.push(`- Body: ${gt.bodyFontSize} / ${gt.bodyLineHeight} / weight ${gt.bodyFontWeight} / spacing ${gt.bodyLetterSpacing}`);
+        lines.push(`- Headings: weight ${gt.headingFontWeight} / ${gt.headingLineHeight} / spacing ${gt.headingLetterSpacing}`);
+    }
     lines.push('');
+
+    // ── Layout Blueprints ─────────────────────────────────────────────────────
+    if (ctx.layouts && ctx.layouts.length > 0) {
+        lines.push('## Layout Blueprints');
+        lines.push('> Section-level spatial structure for pixel-accurate reconstruction\n');
+        ctx.layouts.forEach((s: SectionLayout) => {
+            const header = `### ${s.selector} (${s.display}${s.minHeight ? `, min-height: ${s.minHeight}` : ''})`;
+            lines.push(header);
+            if (s.backgroundColor) lines.push(`- Background: ${s.backgroundColor}`);
+            if (s.columns) lines.push(`- Columns: ${s.columns}`);
+            lines.push(`- Children: ${s.childCount}`);
+            s.children.forEach((c, i) => {
+                const parts = [
+                    `${c.widthPercent}% width`,
+                    c.hasText ? 'has text' : '',
+                    c.hasImage ? 'has image' : '',
+                    c.objectFit ? `object-fit: ${c.objectFit}` : '',
+                    c.backgroundColor ? `bg: ${c.backgroundColor}` : '',
+                ].filter(Boolean).join(', ');
+                lines.push(`  ${i + 1}. \`${c.selector}\` (${c.tag}) — ${parts}`);
+            });
+            lines.push('');
+        });
+    }
 
     // ── Content ───────────────────────────────────────────────────────────────
     lines.push('## Content');

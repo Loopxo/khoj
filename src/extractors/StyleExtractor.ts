@@ -79,6 +79,21 @@ export async function extractStyles(page: Page): Promise<DesignTokens> {
                 });
             }
         }
+        // Global typography (body + heading baseline styles)
+        const bodyEl = document.querySelector('body');
+        const h1El = document.querySelector('h1');
+        const bodyCs = bodyEl ? window.getComputedStyle(bodyEl) : null;
+        const h1Cs = h1El ? window.getComputedStyle(h1El) : null;
+
+        const globalTypography = {
+            bodyFontSize: bodyCs?.fontSize ?? '16px',
+            bodyLineHeight: bodyCs?.lineHeight ?? 'normal',
+            bodyLetterSpacing: bodyCs?.letterSpacing ?? 'normal',
+            bodyFontWeight: bodyCs?.fontWeight ?? '400',
+            headingFontWeight: h1Cs?.fontWeight ?? '700',
+            headingLetterSpacing: h1Cs?.letterSpacing ?? 'normal',
+            headingLineHeight: h1Cs?.lineHeight ?? 'normal',
+        };
 
         return {
             colors,
@@ -86,6 +101,7 @@ export async function extractStyles(page: Page): Promise<DesignTokens> {
             typography,
             fonts: Array.from(fontSet).slice(0, 12),
             breakpoints: Array.from(breakpointSet).sort((a, b) => parseInt(a) - parseInt(b)),
+            globalTypography,
         };
     });
 }
