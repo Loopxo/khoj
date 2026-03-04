@@ -29,14 +29,14 @@ Khoji can be run instantly, or installed either globally or locally to suit your
 ### 1. Run Instantly (No Install)
 If you don't want to install anything, you can run Khoji directly using `npx`:
 ```bash
-npx khojii https://example.com --send-to-gemini --prompt "Identify all primary call-to-action buttons."
+npx khoji https://example.com --send-to-gemini --prompt "Identify all primary call-to-action buttons."
 ```
 
 ### 3. Install as a Dev Dependency
 If you are building an AI project and want Khoji locally:
 ```bash
-npm install -D khojii
-npx khojii https://example.com
+npm install -D khoji
+npx khoji https://example.com
 ```
 
 ### Bypassing "Click to Enter" Preloaders
@@ -45,14 +45,14 @@ Many high-end award-winning sites hide their entire layout behind an initial "Cl
 To bypass this natively, inspect the website to find the CSS Selector of the start button (e.g., `#enter-button` or `.preloader-enter`), and pass it to Khoji using the `--click` flag:
 
 ```bash
-npx khojii https://dich-fashion.webflow.io/ --clone --click ".preloader-enter"
+npx khoji https://dich-fashion.webflow.io/ --clone --click ".preloader-enter"
 ```
 Khoji will automatically navigate to the site, wait for the overlay button, click it, wait for the intro animations to clear, and *then* run the full clone extraction of the underlying page!
 
 ### 2. Install Globally
 If you plan to use Khoji frequently from your terminal:
 ```bash
-npm install -g khojii
+npm install -g khoji
 ```
 Once installed globally, you can drop the `npx` prefix and just type:
 ```bash
